@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="DISPLAY SETTING">
+
+        <CheckBoxPreference
+            android:key="show_system_app_preference"
+            android:summary="Include system installed apps in the list"
+            android:title="Show System Apps" />
+
+        <CheckBoxPreference
+            android:key="sort_apps_preference"
+            android:summary="Sort the apps list in alphabetical order"
+            android:title="Sort Apps" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="REFERENCES">
+
+        <Preference
+            android:key="see_code_preference"
+            android:summary="See the source Code on Github"
+            android:title="Browse Code" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="GENERAL">
+
+        <Preference
+            android:key="rate_preference"
+            android:title="Rate App" />
+
+        <Preference
+            android:key="share_preference"
+            android:title="Share App" />
+
+        <Preference
+            android:key="version_preference"
+            android:summary="1.0"
+            android:title="App Version" />
+
+        <Preference
+            android:key="about_preference"
+            android:title="About App" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
