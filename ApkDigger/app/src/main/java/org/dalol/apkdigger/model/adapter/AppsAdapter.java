@@ -1,5 +1,6 @@
 package org.dalol.apkdigger.model.adapter;
 
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import org.dalol.apkdigger.R;
 import org.dalol.apkdigger.model.exception.ApkDiggerException;
+import org.dalol.apkdigger.model.utilities.AppAdditionalPropUtils;
 import org.dalol.apkdigger.presenter.MainViewPresenter.MainViewListener;
 
 /**
@@ -78,19 +80,24 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> im
 
         View rowView = holder.mView;
         PackageInfo currentPackageInfo = mPackageInfoList.get(position);
+        ApplicationInfo appInfo = currentPackageInfo.applicationInfo;
+        String appFile = appInfo.sourceDir;
 
         ImageView appIcon = (ImageView) rowView.findViewById(R.id.appIcon);
         TextView appName = (TextView) rowView.findViewById(R.id.appName);
         TextView appPackageName = (TextView) rowView.findViewById(R.id.appPackageName);
+        TextView appSize = (TextView) rowView.findViewById(R.id.appSize);
+        TextView appModifiedDate = (TextView) rowView.findViewById(R.id.appInstalledDate);
 //        TextView appVersionName = (TextView) rowView.findViewById(R.id.appVersionName);
 //        TextView appVersionCode = (TextView) rowView.findViewById(R.id.appVersionCode);
 
-        appIcon.setImageDrawable(currentPackageInfo.applicationInfo.loadIcon(packageManager));
-        appName.setText(currentPackageInfo.applicationInfo.loadLabel(packageManager));
+        appIcon.setImageDrawable(appInfo.loadIcon(packageManager));
+        appName.setText(appInfo.loadLabel(packageManager));
         appPackageName.setText(currentPackageInfo.packageName);
 //        appVersionName.setText(currentPackageInfo.versionName);
 //        appVersionCode.setText(Integer.toString(currentPackageInfo.versionCode));
 
+        new AppAdditionalPropUtils(appSize, appModifiedDate, appFile);
     }
 
     @Override
