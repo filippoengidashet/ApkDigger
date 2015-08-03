@@ -34,8 +34,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="Small Text jhkkajdhkjsa jhajskdhjkhasd kjhadsk  asdkjhjda"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16dp"
                 android:textStyle="bold" />
 
             <TextView

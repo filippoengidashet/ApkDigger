@@ -44,7 +44,8 @@ public class MainActivity extends BaseActivity<Integer> implements MainViewPrese
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private static final Interpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
-    public static final int REQUEST_CODE = 100;
+    public static final int RELOAD_APPS_REQUEST_CODE = 100;
+    public static final int UNISTALL_APP_REQUEST_CODE = 200;
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
@@ -180,7 +181,7 @@ public class MainActivity extends BaseActivity<Integer> implements MainViewPrese
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivityForResult(new Intent(MainActivity.this, PreferencesActivity.class), REQUEST_CODE);
+            startActivityForResult(new Intent(MainActivity.this, PreferencesActivity.class), RELOAD_APPS_REQUEST_CODE);
             return true;
         }
 
@@ -191,9 +192,15 @@ public class MainActivity extends BaseActivity<Integer> implements MainViewPrese
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_CODE:
+            case RELOAD_APPS_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     mPresenter.loadInstalledApps();
+                }
+                break;
+            case UNISTALL_APP_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    mPresenter.removeAppFromList(mPresenter.getPosition());
+                    Toast.makeText(getApplicationContext(), "Removed App! ", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -232,15 +239,22 @@ public class MainActivity extends BaseActivity<Integer> implements MainViewPrese
     }
 
     @Override
-    public void showFilterPopup(View view, final int position) {
+    public void showFilterPopup(View view, final int position, boolean isSystem) {
         PopupMenu popup = new PopupMenu(MainActivity.this, view);
         popup.getMenuInflater().inflate(R.menu.popup_filters, popup.getMenu());
+
+        if (!isSystem) {
+            popup.getMenu().findItem(R.id.menu_uninstall).setVisible(false);
+        }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_export:
                         mPresenter.shareApp(position);
+                        return true;
+                    case R.id.menu_uninstall:
+                        mPresenter.uninstallApp(position);
                         return true;
                     case R.id.menu_info:
                         mPresenter.showApplicationInfo(position);
@@ -267,6 +281,11 @@ public class MainActivity extends BaseActivity<Integer> implements MainViewPrese
     @Override
     public void startAppIntent(Intent intent) {
         startActivity(intent);
+    }
+
+    @Override
+    public void startAppIntentForResult(Intent intent) {
+        startActivityForResult(intent, UNISTALL_APP_REQUEST_CODE);
     }
 
     @Override

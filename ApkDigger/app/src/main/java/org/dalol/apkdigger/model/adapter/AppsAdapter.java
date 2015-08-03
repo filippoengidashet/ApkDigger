@@ -53,13 +53,20 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> im
 
         @Override
         public void onClick(View view) {
+            PackageInfo currentPackageInfo = mPackageInfoList.get(getPosition());
+
             switch (view.getId()) {
                 case R.id.appOption:
-                    mListener.showFilterPopup(view, getPosition());
+                    int mask = currentPackageInfo.applicationInfo.FLAG_SYSTEM | currentPackageInfo.applicationInfo.FLAG_UPDATED_SYSTEM_APP;
+                    if ((currentPackageInfo.applicationInfo.flags & mask) != 0) {
+                        mListener.showFilterPopup(view, getPosition(), false);
+                    } else {
+                        mListener.showFilterPopup(view, getPosition(), true);
+                    }
+
                     break;
                 default:
                     try {
-                        PackageInfo currentPackageInfo = mPackageInfoList.get(getPosition());
                         String packageName = currentPackageInfo.packageName;
                         mListener.startImplicitApp(packageName);
                     } catch (Exception ex) {

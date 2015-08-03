@@ -32,6 +32,7 @@ import org.dalol.apkdigger.presenter.task.GetInstalledAppTask;
 public class MainViewPresenter extends BasePresenter implements LifeCycleCallback, GetInstalledAppTask.AppFoundListener {
 
     private MainViewListener mListener;
+    private int mPosition;
 
     public MainViewPresenter(MainViewListener listener) {
         mListener = listener;
@@ -92,6 +93,14 @@ public class MainViewPresenter extends BasePresenter implements LifeCycleCallbac
     @Override
     public void onComplete() {
         mListener.onHideDialog();
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
     }
 
     public void showApplicationInfo(int position) {
@@ -170,6 +179,22 @@ public class MainViewPresenter extends BasePresenter implements LifeCycleCallbac
         }
     }
 
+    public void uninstallApp(int position) {
+        PackageInfo currentPackageInfo = mListener.getPackageInfoList().get(position);
+        String packageName = currentPackageInfo.packageName;
+
+        Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
+        intent.setData(Uri.parse("package:" + packageName));
+        intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
+        setPosition(position);
+        mListener.startAppIntentForResult(intent);
+    }
+
+    public void removeAppFromList(int position) {
+        mListener.getPackageInfoList().remove(position);
+        mListener.getAppsAdapter().notifyItemRemoved(position);
+    }
+
     public interface MainViewListener {
 
         Context getMainContext();
@@ -182,13 +207,15 @@ public class MainViewPresenter extends BasePresenter implements LifeCycleCallbac
 
         void onHideDialog();
 
-        void showFilterPopup(View view, int position);
+        void showFilterPopup(View view, int position, boolean isSystem);
 
         List<PackageInfo> getPackageInfoList();
 
         AppsAdapter getAppsAdapter();
 
         void startAppIntent(Intent intent);
+
+        void startAppIntentForResult(Intent intent);
 
         void onException(ApkDiggerException exception);
 

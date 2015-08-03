@@ -7,6 +7,11 @@
         android:icon="@android:drawable/ic_menu_share"/>
 
     <item
+        android:id="@+id/menu_uninstall"
+        android:title="Uninstall App"
+        android:icon="@android:drawable/ic_delete"/>
+
+    <item
         android:id="@+id/menu_info"
         android:title="App Info"
         android:icon="@android:drawable/ic_menu_info_details"/>
