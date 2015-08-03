@@ -14,5 +14,7 @@ Features:
 + sort the list alphabetically
 + showing hiding system app from the list
 + See the Extracted Apk's "APK-Digger" folder
++ Uninstall an app from a popup menu
++ See app size and installation date
 
 ![Fetch Result](https://github.com/filippella/ApkDigger/blob/master/screenshots/app_list.png)
